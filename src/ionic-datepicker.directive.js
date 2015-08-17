@@ -119,10 +119,6 @@
           current_date.setSeconds(0);
           current_date.setMilliseconds(0);
           
-+          //converting parsed date to a date object
-+          if(typeof current_date === 'string'){
-+            current_date = new Date(current_date)
-+          }
 
           scope.selctedDateString = (new Date(current_date)).toString();
           currentDate = angular.copy(current_date);
