@@ -251,6 +251,7 @@
                   };
 
                   scope.selctedDateString = todayObj.dateString;
+                  scope.selctedDateStringCopy = angular.copy(scope.selctedDateString);
                   scope.date_selection.selected = true;
                   scope.date_selection.selectedDate = new Date(todayObj.dateString);
                   refreshDateList(new Date());
