@@ -26,7 +26,8 @@
         scope.todayLabel = scope.inputObj.todayLabel ? (scope.inputObj.todayLabel) : 'Today';
         scope.closeLabel = scope.inputObj.closeLabel ? (scope.inputObj.closeLabel) : 'Close';
         scope.setLabel = scope.inputObj.setLabel ? (scope.inputObj.setLabel) : 'Set';
-        scope.errorMsgLabel = scope.inputObj.errorMsgLabel ? (scope.inputObj.errorMsgLabel) : 'Please select some time.';
+        scope.errorMsgLabel = scope.inputObj.errorMsgLabel ? (scope.inputObj.errorMsgLabel) : 'Please select a date.';
+        scope.setButtonType = scope.inputObj.setButtonType ? (scope.inputObj.setButtonType) : 'button-positive';
 
         scope.enableDatesFrom = {epoch: 0, isSet: false};
         scope.enableDatesTo = {epoch: 0, isSet: false};
@@ -34,13 +35,11 @@
         //Setting the from and to dates
         if (scope.inputObj.from) {
           scope.enableDatesFrom.isSet = true;
-          //var fromDates = scope.inputObj.from.split(/[/-]+/);
           scope.enableDatesFrom.epoch = scope.inputObj.from.getTime();
         }
 
         if (scope.inputObj.to) {
           scope.enableDatesTo.isSet = true;
-          //var toDates = scope.inputObj.to.split(/[/-]+/);
           scope.enableDatesTo.epoch = scope.inputObj.to.getTime();
         }
 
@@ -50,12 +49,11 @@
         } else {
           scope.ipDate = new Date();
         }
-
         scope.selectedDateFull = scope.ipDate;
 
         //Setting the months list. This is useful, if the component needs to use some other language.
         var monthsList = [];
-        if (scope.inputObj.monthList.length === 12) {
+        if (scope.inputObj.monthList && scope.inputObj.monthList.length === 12) {
           monthsList = scope.inputObj.monthList;
         } else {
           monthsList = DatepickerService.monthsList;
@@ -71,7 +69,7 @@
         }
 
         //Setting the disabled dates list.
-        if (scope.inputObj.disabledDates.length == 0) {
+        if (scope.inputObj.disabledDates && scope.inputObj.disabledDates.length == 0) {
           scope.disabledDates = [];
         } else {
           angular.forEach(scope.inputObj.disabledDates, function (val, key) {
@@ -91,7 +89,13 @@
         currentDate.setMilliseconds(0);
 
         scope.selctedDateString = currentDate.toString();
-        scope.weekNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+        scope.weekNames = [];
+
+        if (scope.inputObj.weekList && scope.inputObj.weekList.length === 7) {
+          scope.weekNames = scope.inputObj.weekList;
+        } else {
+          scope.weekNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+        }
         scope.today = {};
 
         if (scope.mondayFirst == true) {
@@ -118,7 +122,6 @@
           current_date.setMinutes(0);
           current_date.setSeconds(0);
           current_date.setMilliseconds(0);
-          
 
           scope.selctedDateString = (new Date(current_date)).toString();
           currentDate = angular.copy(current_date);
@@ -251,7 +254,6 @@
                   };
 
                   scope.selctedDateString = todayObj.dateString;
-                  scope.selctedDateStringCopy = angular.copy(scope.selctedDateString);
                   scope.date_selection.selected = true;
                   scope.date_selection.selectedDate = new Date(todayObj.dateString);
                   refreshDateList(new Date());
@@ -260,7 +262,7 @@
               },
               {
                 text: scope.setLabel,
-                type: 'button-positive',
+                type: scope.setButtonType,
                 onTap: function (e) {
                   scope.date_selection.submitted = true;
 
