@@ -32,6 +32,9 @@
         scope.enableDatesFrom = {epoch: 0, isSet: false};
         scope.enableDatesTo = {epoch: 0, isSet: false};
 
+
+        scope.showTodayButton = scope.inputObj.showTodayButton ;
+
         //Setting the from and to dates
         if (scope.inputObj.from) {
           scope.enableDatesFrom.isSet = true;
@@ -212,6 +215,68 @@
           scope.selectedDateFull = scope.date_selection.selectedDate;
         };
 
+
+        var setButtonObj =
+        {
+          text: scope.setLabel,
+          type: scope.setButtonType,
+          onTap: function (e) {
+            scope.date_selection.submitted = true;
+
+            if (scope.date_selection.selected === true) {
+              scope.inputObj.callback(scope.date_selection.selectedDate);
+            } else {
+              e.preventDefault();
+            }
+          }
+        };
+        var todayButtonObj =
+        {
+            text: scope.todayLabel,
+            onTap: function (e) {
+
+              var today = new Date();
+              today.setHours(0);
+              today.setMinutes(0);
+              today.setSeconds(0);
+              today.setMilliseconds(0);
+
+              var tempEpoch = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+              var todayObj = {
+                date: today.getDate(),
+                month: today.getMonth(),
+                year: today.getFullYear(),
+                day: today.getDay(),
+                dateString: today.toString(),
+                epochLocal: tempEpoch.getTime(),
+                epochUTC: (tempEpoch.getTime() + (tempEpoch.getTimezoneOffset() * 60 * 1000))
+              };
+
+              scope.selctedDateString = todayObj.dateString;
+              scope.date_selection.selected = true;
+              scope.date_selection.selectedDate = new Date(todayObj.dateString);
+              refreshDateList(new Date());
+              e.preventDefault();
+            }
+        } ;
+
+        var popupButtons = [
+          {
+            text: scope.closeLabel,
+            onTap: function (e) {
+              scope.inputObj.callback(undefined);
+            }
+          }
+        ];
+
+        
+        if ( scope.showTodayButton ) {
+          popupButtons.push(todayButtonObj);
+          popupButtons.push(setButtonObj);
+        } else {
+          popupButtons.push(setButtonObj);
+        }
+
         element.on("click", function () {
           if (!scope.ipDate) {
             var defaultDate = new Date();
@@ -225,55 +290,7 @@
             title: scope.titleLabel,
             subTitle: '',
             scope: scope,
-            buttons: [
-              {
-                text: scope.closeLabel,
-                onTap: function (e) {
-                  scope.inputObj.callback(undefined);
-                }
-              },
-              {
-                text: scope.todayLabel,
-                onTap: function (e) {
-
-                  var today = new Date();
-                  today.setHours(0);
-                  today.setMinutes(0);
-                  today.setSeconds(0);
-                  today.setMilliseconds(0);
-
-                  var tempEpoch = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-                  var todayObj = {
-                    date: today.getDate(),
-                    month: today.getMonth(),
-                    year: today.getFullYear(),
-                    day: today.getDay(),
-                    dateString: today.toString(),
-                    epochLocal: tempEpoch.getTime(),
-                    epochUTC: (tempEpoch.getTime() + (tempEpoch.getTimezoneOffset() * 60 * 1000))
-                  };
-
-                  scope.selctedDateString = todayObj.dateString;
-                  scope.date_selection.selected = true;
-                  scope.date_selection.selectedDate = new Date(todayObj.dateString);
-                  refreshDateList(new Date());
-                  e.preventDefault();
-                }
-              },
-              {
-                text: scope.setLabel,
-                type: scope.setButtonType,
-                onTap: function (e) {
-                  scope.date_selection.submitted = true;
-
-                  if (scope.date_selection.selected === true) {
-                    scope.inputObj.callback(scope.date_selection.selectedDate);
-                  } else {
-                    e.preventDefault();
-                  }
-                }
-              }
-            ]
+            buttons: popupButtons
           });
         });
       }
