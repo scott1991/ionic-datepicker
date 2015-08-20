@@ -48,7 +48,10 @@ angular.module('mainModuleName', ['ionic', 'ionic-datepicker']){
       mondayFirst: true,	//Optional
       disabledDates:disabledDates,	//Optional
       monthList:monthList,	//Optional
+<<<<<<< HEAD
       weekList:weekList,	//Optional
+=======
+>>>>>>> rajeshwarpatlolla/master
       from: new Date(2015, 7, 2),	//Optional
       to: new Date(2015, 7, 29),	//Optional
       callback: function (val) {	//Mandatory
