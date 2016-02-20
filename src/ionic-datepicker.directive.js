@@ -12,7 +12,7 @@
     return {
       restrict: 'AE',
       replace: true,
-      scope: {//12345567788888
+      scope: {
         inputObj: "=inputObj"
       },
       link: function (scope, element, attrs) {
@@ -269,7 +269,7 @@
           }
         ];
 
-
+        
         if ( scope.showTodayButton ) {
           popupButtons.push(todayButtonObj);
           popupButtons.push(setButtonObj);
